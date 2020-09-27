@@ -46,7 +46,7 @@ parts:
     curv:
         plugin: make
         source: https://github.com/curv3d/curv.git
-        source-tag: "0.4"
+        source-branch: master
         filesets:
             bin:
                 - -usr/share/doc
