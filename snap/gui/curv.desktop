@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Curv
+Comment=Curv 3D design language
+Exec=curv
+Icon=${SNAP}/meta/gui/curv.png
+Terminal=true
+Type=Application
+Categories=Graphics;2DGraphics;3DGraphics

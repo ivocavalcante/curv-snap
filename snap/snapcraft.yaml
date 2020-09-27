@@ -1,0 +1,120 @@
+name: curv
+base: core20
+adopt-info: curv
+summary: "Curv: a language for making art using mathematics"
+description: |
+    Curv is a programming language for creating art using mathematics. It's a 2D and 3D geometric modelling tool that supports full colour, animation and 3D printing.
+
+    Features:
+
+    - Curv is a simple, powerful, dynamically typed, pure functional programming language.
+    - Curv is easy to use for beginners. It has a standard library of predefined geometric shapes, plus operators for transforming and combining shapes. These can be plugged together like Lego to make 2D and 3D models.
+    - Coloured shapes are represented using Function Representation (F-Rep). They can be infinitely detailed, infinitely large, and any shape or colour pattern that can be described using mathematics can be represented exactly.
+    - Curv exposes the full power of F-Rep programming to experts. The standard geometry library is written entirely in Curv. Many of the demos seen on shadertoy.com can be reproduced in Curv, using shorter, simpler programs. Experts can package techniques used on shadertoy as high level operations for use by beginners.
+    - Rendering is GPU accelerated. Curv programs are compiled into fragment shaders which are executed on the GPU.
+    - Curv can export meshes to STL, OBJ and X3D files for 3D printing. The X3D format supports full colour 3D printing (on Shapeways.com, at least). These meshes are defect free: watertight, manifold, with no self intersections, degenerate triangles, or flipped triangles.
+
+    This snapped version doesn't support opening an external editor (-e command-line option); you have to open it yourself.
+
+    For example geometries, go to https://github.com/curv3d/curv/tree/master/examples .
+
+    This is an UNOFFICIAL package, not related to the project. There are known issues with some GPUs setup; if you're interested in troubleshooting, feel free to contact me.
+
+grade: stable
+confinement: strict
+license: Apache-2.0
+
+architectures:
+    - build-on: amd64
+      run-on: amd64
+
+layout:
+    /usr/lib/x86_64-linux-gnu/dri:
+        symlink: $SNAP/usr/lib/x86_64-linux-gnu/dri
+    /usr/bin/c++:
+        symlink: $SNAP/usr/bin/g++
+    /usr/include:
+        bind: $SNAP/usr/include
+    /usr/lib/x86_64-linux-gnu/libmvec_nonshared.a:
+        symlink: $SNAP/usr/lib/x86_64-linux-gnu/libmvec_nonshared.a
+    /usr/lib/x86_64-linux-gnu/libc_nonshared.a:
+        symlink: $SNAP/usr/lib/x86_64-linux-gnu/libc_nonshared.a
+    /usr/share/libdrm:
+        symlink: $SNAP/usr/share/libdrm
+
+parts:
+    curv:
+        plugin: make
+        source: https://github.com/curv3d/curv.git
+        source-tag: "0.4"
+        filesets:
+            bin:
+                - -usr/share/doc
+                - -usr/share/man*
+
+        build-packages:
+            - build-essential
+            - cmake
+            - git
+            - libboost-all-dev
+            - libopenexr-dev
+            - libtbb-dev
+            - libglm-dev
+            - dbus-x11
+            - libglvnd-dev
+            - libxcursor-dev
+            - libxinerama-dev
+            - libxrandr-dev
+            - libglu1-mesa-dev
+            - libgles2-mesa-dev
+            - libgl1-mesa-dev
+            - libxi-dev
+            - libdouble-conversion-dev
+
+        stage-packages:
+            - libboost-filesystem1.71.0
+            - libboost-iostreams1.71.0
+            - libboost-system1.71.0
+            - libdouble-conversion3
+            - libilmbase24
+            - libtbb2
+            - libx11-6
+            - libxau6
+            - libxcb1
+            - libxdmcp6
+            - libglu1-mesa
+            - libgcc1
+            - libdrm-common
+            - g++
+            - libglm-dev
+            - libstdc++-9-dev
+            - libc6-dev
+
+        prime:
+            - $bin
+
+        override-build: |
+          _version="$(git describe --tags | cut -d- -f1)"
+          _commit="$(git describe --tags | cut -d- -f3)"
+          if [ -n "$_commit" ]; then
+            _version="$_commit"
+          fi
+
+          snapcraftctl set-version "$_version"
+          snapcraftctl build
+
+apps:
+    curv:
+        command: usr/local/bin/curv
+        common-id: curv
+        environment:
+            LD_LIBRARY_PATH: $SNAP_LIBRARY_PATH:$LD_LIBRARY_PATH
+        plugs:
+            - desktop
+            - desktop-legacy
+            - x11
+            - opengl
+            - unity7
+            - home
+            - removable-media
+

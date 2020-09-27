@@ -1,0 +1,11 @@
+,*
+.*.swp
+.*.swo
+.swp
+.swo
+*.snap
+tags
+/doxygen
+/debug
+/release
+/libcurv/version.h
