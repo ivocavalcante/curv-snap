@@ -100,7 +100,7 @@ parts:
             _version="$_commit"
           fi
 
-          snapcraftctl set-version "$_version"
+          snapcraftctl set-version "${_version}-snap1"
           snapcraftctl build
 
 apps:
@@ -108,7 +108,7 @@ apps:
         command: usr/local/bin/curv
         common-id: curv
         environment:
-            LD_LIBRARY_PATH: $SNAP_LIBRARY_PATH:$LD_LIBRARY_PATH
+            LD_LIBRARY_PATH: $SNAP_LIBRARY_PATH
         plugs:
             - desktop
             - desktop-legacy
