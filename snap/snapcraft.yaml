@@ -32,7 +32,7 @@ layout:
     /usr/lib/x86_64-linux-gnu/dri:
         symlink: $SNAP/usr/lib/x86_64-linux-gnu/dri
     /usr/bin/c++:
-        symlink: $SNAP/usr/bin/g++
+        symlink: $SNAP/usr/bin/g++-10
     /usr/include:
         bind: $SNAP/usr/include
     /usr/lib/x86_64-linux-gnu/libmvec_nonshared.a:
@@ -46,14 +46,14 @@ parts:
     curv:
         plugin: make
         source: https://github.com/curv3d/curv.git
-        source-branch: master
+        source-tag: "0.5"
         filesets:
             bin:
                 - -usr/share/doc
                 - -usr/share/man*
 
         build-packages:
-            - build-essential
+            - gcc-10
             - cmake
             - git
             - libboost-all-dev
@@ -69,7 +69,6 @@ parts:
             - libgles2-mesa-dev
             - libgl1-mesa-dev
             - libxi-dev
-            - libdouble-conversion-dev
 
         stage-packages:
             - libboost-filesystem1.71.0
@@ -85,10 +84,11 @@ parts:
             - libglu1-mesa
             - libgcc1
             - libdrm-common
-            - g++
+            - g++-10
             - libglm-dev
             - libstdc++-9-dev
             - libc6-dev
+            - libcrypt1
 
         prime:
             - $bin
