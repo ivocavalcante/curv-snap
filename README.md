@@ -1,6 +1,6 @@
 # curv-snap
 
-Source for Snap package of Curv project **(unnoficial)**.
+Source for Snap package of Curv project **(unoficial)**.
 
 Original project URL: [GitHub/curv](https://github.com/curv3d/curv).
 
