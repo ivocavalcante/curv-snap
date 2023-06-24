@@ -100,7 +100,7 @@ parts:
             _version="$_commit"
           fi
 
-          snapcraftctl set-version "${_version}+snap4"
+          snapcraftctl set-version "${_version}+snap5"
           snapcraftctl build
 
 apps:
