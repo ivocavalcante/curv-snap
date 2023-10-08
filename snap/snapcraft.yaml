@@ -1,5 +1,5 @@
 name: curv
-base: core20
+base: core22
 adopt-info: curv
 summary: "Curv: a language for making art using mathematics"
 description: |
@@ -26,39 +26,32 @@ license: Apache-2.0
 
 architectures:
     - build-on: amd64
-      run-on: amd64
+      build-for: amd64
 
 layout:
     /usr/lib/x86_64-linux-gnu/dri:
         symlink: $SNAP/usr/lib/x86_64-linux-gnu/dri
     /usr/bin/c++:
-        symlink: $SNAP/usr/bin/g++-10
+        symlink: $SNAP/usr/bin/g++
     /usr/include:
         bind: $SNAP/usr/include
     /usr/lib/x86_64-linux-gnu/libmvec_nonshared.a:
         symlink: $SNAP/usr/lib/x86_64-linux-gnu/libmvec_nonshared.a
     /usr/lib/x86_64-linux-gnu/libc_nonshared.a:
         symlink: $SNAP/usr/lib/x86_64-linux-gnu/libc_nonshared.a
-    /usr/share/libdrm:
-        symlink: $SNAP/usr/share/libdrm
 
 parts:
     curv:
         plugin: make
         source: https://github.com/curv3d/curv.git
         source-tag: "0.5"
-        filesets:
-            bin:
-                - -usr/share/doc
-                - -usr/share/man*
-
         build-packages:
-            - gcc-10
+            - build-essential
             - cmake
             - git
             - libboost-all-dev
             - libopenexr-dev
-            - libtbb-dev
+            - libtbb2-dev
             - libglm-dev
             - dbus-x11
             - libglvnd-dev
@@ -71,44 +64,45 @@ parts:
             - libxi-dev
 
         stage-packages:
-            - libboost-filesystem1.71.0
-            - libboost-iostreams1.71.0
-            - libboost-system1.71.0
+            - libboost-filesystem1.74.0
+            - libboost-iostreams1.74.0
+            - libboost-system1.74.0
             - libdouble-conversion3
-            - libilmbase24
+            - libilmbase25
             - libtbb2
             - libx11-6
             - libxau6
             - libxcb1
             - libxdmcp6
+            - libgl1
             - libglu1-mesa
             - libgcc1
             - libdrm-common
-            - g++-10
+            - g++
             - libglm-dev
-            - libstdc++-9-dev
+            - libstdc++-11-dev
             - libc6-dev
-            - libcrypt1
 
         prime:
-            - $bin
+          - -usr/share/doc
+          - -usr/share/man*
 
         override-build: |
+          set -euxo pipefail
+
           _version="$(git describe --tags | cut -d- -f1)"
           _commit="$(git describe --tags | cut -d- -f3)"
           if [ -n "$_commit" ]; then
             _version="$_commit"
           fi
 
-          snapcraftctl set-version "${_version}+snap5"
-          snapcraftctl build
+          craftctl set version="${_version}+snap6"
+          craftctl default
 
 apps:
     curv:
         command: usr/local/bin/curv
         common-id: curv
-        environment:
-            LD_LIBRARY_PATH: $SNAP_LIBRARY_PATH
         plugs:
             - desktop
             - desktop-legacy
